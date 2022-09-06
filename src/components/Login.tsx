@@ -31,7 +31,7 @@ const authReducer = (state: AuthState, action: AuthAction): AuthState => {
         username: '',
         name: '',
       }
-    case 'login'
+    // case 'login'
     default:
       return state
   }
