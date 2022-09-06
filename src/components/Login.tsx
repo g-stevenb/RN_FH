@@ -12,8 +12,13 @@ const initialState: AuthState = {
   username: '',
   name: '',
 }
-
-type AuthAction = { type: 'logout' }
+type LoginPayLoad = {
+  username: string, 
+  name: string
+}
+type AuthAction =
+  | { type: 'logout' }
+  | { type: 'login', payload: LoginPayLoad }
 
 //state no se modifica
 //authReducer devuelve un tipo AuthState
@@ -26,21 +31,24 @@ const authReducer = (state: AuthState, action: AuthAction): AuthState => {
         username: '',
         name: '',
       }
-
+    case 'login'
     default:
       return state
   }
 }
 
 export const Login = () => {
-  const [state, dispatch] = useReducer(authReducer, initialState)
+  const [{ validando, token, name }, dispatch] = useReducer(
+    authReducer,
+    initialState
+  )
   useEffect(() => {
     setTimeout(() => {
       dispatch({ type: 'logout' })
     }, 1500)
   }, [])
 
-  if (state.validando) {
+  if (validando) {
     return (
       <>
         <h3>Login</h3>
@@ -50,10 +58,24 @@ export const Login = () => {
   }
   return (
     <>
-      <div className='alert alert-danger'>No autenticado</div>
-      <div className='alert alert-success'>Autenticado</div>
-      <button className={'btn btn-primary'}>Login</button>&nbsp;
-      <button className={'btn btn-danger'}>Logout</button>
+      <h3>Login</h3>
+      {(token)
+        ? <div className='alert alert-success'>Autenticado como {name}</div>
+        : <div className='alert alert-danger'>No autenticado</div>
+
+      }
+
+      {
+        (token)
+          ?
+          (
+            <button className={'btn btn-primary'}>Login</button>
+          )
+          :
+          (
+            <button className={'btn btn-danger'}>Logout</button>
+          )
+      }
     </>
   )
 }
